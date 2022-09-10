@@ -2,6 +2,11 @@
 
 package dev.chaws.automaticinventory;
 
+import de.exlll.configlib.ConfigLib;
+import de.exlll.configlib.NameFormatters;
+import de.exlll.configlib.YamlConfigurationProperties;
+import de.exlll.configlib.YamlConfigurations;
+import dev.chaws.automaticinventory.config.AutomaticInventoryConfig;
 import kr.entree.spigradle.annotations.PluginMain;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.*;
@@ -25,6 +30,7 @@ import org.bukkit.potion.PotionData;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.*;
 import java.util.logging.Logger;
 
@@ -37,12 +43,7 @@ public class AutomaticInventory extends JavaPlugin
 	//for logging to the console and log file
 	private static Logger log;
 
-    Set<Material> config_noAutoRefill = new HashSet<>();
-    Set<Material> config_noAutoDeposit = new HashSet<>();
-    static boolean autosortEnabledByDefault = true;
-	static boolean quickDepositEnabledByDefault = true;
-	static boolean autoRefillEnabledByDefault = true;
-    private static List<String> excludeItemsContainingThisString;
+    public AutomaticInventoryConfig config;
 		
 	//this handles data storage, like player and region data
 	public DataStore dataStore;
@@ -54,84 +55,25 @@ public class AutomaticInventory extends JavaPlugin
 	
 	public void onEnable()
 	{
-	    log = getLogger();
-		
 		instance = this;
-		
+	    log = getLogger();
+
+		var properties = ConfigLib.BUKKIT_DEFAULT_PROPERTIES.toBuilder().build();
+		var configFilePath = new File(getDataFolder(), "config.yml").toPath();
+		this.config = YamlConfigurations.update(
+			configFilePath,
+			AutomaticInventoryConfig.class,
+			properties
+		);
+
 		this.dataStore = new DataStore();
-		
-		//read configuration settings (note defaults)
-        this.getDataFolder().mkdirs();
-        File configFile = new File(this.getDataFolder().getPath() + File.separatorChar + "config.yml");
-        FileConfiguration config = YamlConfiguration.loadConfiguration(configFile);
-        FileConfiguration outConfig = new YamlConfiguration();
-        
-        List<String> noAutoRefillIDs_string = config.getStringList("Auto Refill.Excluded Items");
-        if(noAutoRefillIDs_string.size() == 0)
-        {
-            noAutoRefillIDs_string.add("AIR");
-            noAutoRefillIDs_string.add("POTION");
-        }
-        
-        for(String idString : noAutoRefillIDs_string)
-        {
-            Material material = Material.matchMaterial(idString.toUpperCase());
-            if (material == null)
-                getLogger().warning(idString + " is not a valid material");
-            else
-                this.config_noAutoRefill.add(material);
-        }
 
-        outConfig.set("Auto Refill.Excluded Items", noAutoRefillIDs_string);
-        
-        List<String> noAutoDepositIDs_string = config.getStringList("Auto Deposit.Excluded Items");
-        if(noAutoDepositIDs_string.size() == 0)
-        {
-            noAutoDepositIDs_string.add("AIR");
-            noAutoDepositIDs_string.add("ARROW");
-            noAutoDepositIDs_string.add("SPECTRAL_ARROW");
-            noAutoDepositIDs_string.add("TIPPED_ARROW");
-        }
-        
-        for(String idString : noAutoDepositIDs_string)
-        {
-            Material material = Material.matchMaterial(idString.toUpperCase());
-            if (material == null)
-                getLogger().warning(idString + " is not a valid material");
-            else
-                this.config_noAutoDeposit.add(material);
-        }
-        
-        outConfig.set("Auto Deposit.Excluded Items", noAutoDepositIDs_string);
-
-        autosortEnabledByDefault = config.getBoolean("autosortEnabledByDefault", true);
-        outConfig.set("autosortEnabledByDefault", autosortEnabledByDefault);
-
-        excludeItemsContainingThisString = config.getStringList("excludeItemsContainingThisString");
-        String legacyExcludedItem = config.getString("excludeItemsContainingThisString");
-        if (legacyExcludedItem != null && !excludeItemsContainingThisString.toString().equals(legacyExcludedItem))
-        {
-            excludeItemsContainingThisString.add(legacyExcludedItem);
-        }
-        outConfig.set("excludeItemsContainingThisString", excludeItemsContainingThisString);
-        
-        try
-        {
-            outConfig.save(configFile);
-        }
-        catch(IOException  e)
-        {
-            AddLogEntry("Encountered an issue while writing to the config file.");
-            e.printStackTrace();
-        }
-		
 		//register for events
-		PluginManager pluginManager = this.getServer().getPluginManager();
-		
-		AIEventHandler aIEventHandler = new AIEventHandler();
+		var pluginManager = this.getServer().getPluginManager();
+		var aIEventHandler = new AIEventHandler();
 		pluginManager.registerEvents(aIEventHandler, this);
 
-		for(Player player : this.getServer().getOnlinePlayers())
+		for (var player : this.getServer().getOnlinePlayers())
 		{
 		    PlayerData.Preload(player);
 		}
@@ -462,7 +404,9 @@ public class AutomaticInventory extends JavaPlugin
 
             if(isItemExcludedViaName(sourceStack)) continue;
 
-            if (AutomaticInventory.instance.config_noAutoDeposit.contains(sourceStack.getType())) continue;
+            if (AutomaticInventory.instance.config.autoDeposit.excludedItems.contains(sourceStack.getType())) {
+				continue;
+			}
             
             String signature = getSignature(sourceStack);
             int sourceStackSize = sourceStack.getAmount();
@@ -522,13 +466,13 @@ public class AutomaticInventory extends JavaPlugin
     //#36 Feature: exclude items that match a string specified in config
     private static boolean isItemExcludedViaName(ItemStack itemStack)
     {
-        if (excludeItemsContainingThisString.isEmpty())
+        if (instance.config.excludeItemsContainingThisString.isEmpty())
             return false;
         ItemMeta meta = itemStack.getItemMeta();
         if (!meta.hasDisplayName())
             return false;
         String name = meta.getDisplayName();
-        return excludeItemsContainingThisString.stream().anyMatch(name::contains);
+        return instance.config.excludeItemsContainingThisString.stream().anyMatch(name::contains);
     }
 
     public class FakePlayerInteractEvent extends PlayerInteractEvent

@@ -118,7 +118,7 @@ class PlayerData
     
     private boolean isDirty = false;
     
-    private boolean sortChests = AutomaticInventory.autosortEnabledByDefault;
+    private boolean sortChests = AutomaticInventory.instance.config.autosortEnabledByDefault;
     boolean isSortChests()
     {
         this.waitForLoadComplete();
@@ -130,7 +130,7 @@ class PlayerData
         this.sortChests = sortChests;
     }
 
-    private boolean sortInventory = AutomaticInventory.autosortEnabledByDefault;
+    private boolean sortInventory = AutomaticInventory.instance.config.autosortEnabledByDefault;
     
     boolean isSortInventory()
     {
@@ -143,7 +143,7 @@ class PlayerData
         this.sortInventory = sortInventory;
     }
 
-    private boolean quickDepositEnabled = AutomaticInventory.quickDepositEnabledByDefault;
+    private boolean quickDepositEnabled = AutomaticInventory.instance.config.quickDepositEnabledByDefault;
     boolean isQuickDepositEnabled()
     {
         this.waitForLoadComplete();
@@ -155,7 +155,7 @@ class PlayerData
         this.quickDepositEnabled = quickDepositEnabled;
     }
 
-    private boolean autoRefillEnabled = AutomaticInventory.autoRefillEnabledByDefault;
+    private boolean autoRefillEnabled = AutomaticInventory.instance.config.autoRefillEnabledByDefault;
     boolean isAutoRefillEnabled()
     {
         this.waitForLoadComplete();
@@ -266,10 +266,10 @@ class PlayerData
                 {                   
                     needRetry = false;
                     FileConfiguration config = YamlConfiguration.loadConfiguration(playerFile);
-                    this.sortChests = config.getBoolean("Sort Chests", AutomaticInventory.autosortEnabledByDefault);
-                    this.sortInventory = config.getBoolean("Sort Personal Inventory", AutomaticInventory.autosortEnabledByDefault);
-                    this.quickDepositEnabled = config.getBoolean("Quick Deposit Enabled", AutomaticInventory.quickDepositEnabledByDefault);
-                    this.autoRefillEnabled = config.getBoolean("Auto Refill Enabled", AutomaticInventory.autoRefillEnabledByDefault);
+                    this.sortChests = config.getBoolean("Sort Chests", AutomaticInventory.instance.config.autosortEnabledByDefault);
+                    this.sortInventory = config.getBoolean("Sort Personal Inventory", AutomaticInventory.instance.config.autosortEnabledByDefault);
+                    this.quickDepositEnabled = config.getBoolean("Quick Deposit Enabled", AutomaticInventory.instance.config.quickDepositEnabledByDefault);
+                    this.autoRefillEnabled = config.getBoolean("Auto Refill Enabled", AutomaticInventory.instance.config.autoRefillEnabledByDefault);
                     this.usedQuickDeposit = config.getBoolean("Used Quick Deposit", false);
                     this.gotChestSortInfo = config.getBoolean("Received Messages.Chest Inventory", false);
                     this.gotInventorySortInfo = config.getBoolean("Received Messages.Personal Inventory", false);

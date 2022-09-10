@@ -136,7 +136,9 @@ public class AIEventHandler implements Listener
             return;
         }
 
-        if (AutomaticInventory.instance.config_noAutoRefill.contains(stack.getType())) return;
+        if (AutomaticInventory.instance.config.autoRefill.excludedItems.contains(stack.getType())) {
+            return;
+        }
 		if(stack.getAmount() == 1)
 		{
 		    PlayerInventory inventory = player.getInventory();

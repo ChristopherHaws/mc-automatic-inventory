@@ -19,9 +19,11 @@ repositories {
         name = 'sonatype'
         url = 'https://oss.sonatype.org/content/groups/public/'
     }
+    maven { url 'https://jitpack.io' }
 }
 
 dependencies {
+    implementation 'com.github.Exlll.ConfigLib:configlib-paper:v4.2.0'
     implementation 'org.bstats:bstats-bukkit:3.0.0'
     compileOnly spigot(project.property("spigotApiVersion"))
 }
