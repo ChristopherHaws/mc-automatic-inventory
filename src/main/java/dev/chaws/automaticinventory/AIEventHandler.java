@@ -18,21 +18,14 @@ import org.bukkit.event.block.BlockDamageEvent;
 import org.bukkit.event.block.BlockFertilizeEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.event.inventory.InventoryInteractEvent;
-import org.bukkit.event.inventory.InventoryOpenEvent;
-import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.event.inventory.*;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.projectiles.ProjectileSource;
 
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.*;
 import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Map;
 
 import static java.lang.Integer.valueOf;
 
@@ -50,6 +43,28 @@ public class AIEventHandler implements Listener
         }
         
         return null;
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onMoveItemsToChest(InventoryMoveItemEvent event) {
+        var destination = event.getDestination();
+        if (destination.getType() != InventoryType.CHEST) {
+            return;
+        }
+
+        var location = destination.getLocation();
+        if (location == null) {
+            return;
+        }
+
+        if (location.getBlock().getState() instanceof Chest chest) {
+            var customName = chest.getCustomName();
+            if (customName == null || !customName.equalsIgnoreCase("autodeposit")) {
+                return;
+            }
+
+
+        }
     }
     
     @EventHandler(priority = EventPriority.MONITOR)

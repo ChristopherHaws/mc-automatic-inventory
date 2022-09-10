@@ -141,14 +141,11 @@ public class FindChestsThread extends Thread
     {
         if (material == null)
             return false;
-        switch (material)
-        {
-            case CHEST:
-            case TRAPPED_CHEST:
-            case BARREL:
-                return true;
-        }
-        return MaterialColorTag.SHULKER_BOX.isTagged(material);
+
+        return switch (material) {
+            case CHEST, TRAPPED_CHEST, BARREL -> true;
+            default -> MaterialColorTag.SHULKER_BOX.isTagged(material);
+        };
     }
 
     private boolean isPassable(Material material)
