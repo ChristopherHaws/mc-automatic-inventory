@@ -80,3 +80,9 @@ Copy AutomaticInventory.jar into your server's plugins folder and then execute t
 **/autorefill enable** turns on hotbar stack auto refill.
 
 **/autorefill disable** turns off hotbar stack auto refill.
+
+# Credits
+This is a fork of:
+- [MLG-Fortress/AutomaticInventory](https://github.com/MLG-Fortress/AutomaticInventory)
+- [HelloWorldMinecraft/AutomaticInventory](https://github.com/HelloWorldMinecraft/AutomaticInventory)
+- [BigScary/AutomaticInventory](https://github.com/BigScary/AutomaticInventory)

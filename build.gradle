@@ -28,7 +28,7 @@ dependencies {
 
 spigot {
     name = project.property("pluginName")
-    authors = [project.property("authors")]
+    authors = project.property("authors").split("\\s*,\\s*")
     apiVersion = project.property("spigotApiVersion")
     load = STARTUP
     commands {
@@ -106,6 +106,7 @@ spigot {
 }
 
 shadowJar {
+    //archiveClassifier.set("")
     relocate 'org.bstats', 'dev.chaws.automaticinventory'
 }
 
