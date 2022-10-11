@@ -16,6 +16,10 @@ repositories {
         url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
     }
     maven {
+        name = 'paper-repo'
+        url 'https://repo.papermc.io/repository/maven-public/'
+    }
+    maven {
         name = 'sonatype'
         url = 'https://oss.sonatype.org/content/groups/public/'
     }
@@ -24,6 +28,9 @@ repositories {
 dependencies {
     implementation 'org.bstats:bstats-bukkit:3.0.0'
     compileOnly spigot(project.property("spigotApiVersion"))
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+    testImplementation 'com.github.seeseemelk:MockBukkit-v1.19:2.122.0'
 }
 
 spigot {
@@ -134,4 +141,8 @@ processResources {
     filesMatching('plugin.yml') {
         expand props
     }
+}
+
+test {
+    useJUnitPlatform()
 }

@@ -8,7 +8,9 @@ import dev.chaws.automaticinventory.listeners.*;
 import dev.chaws.automaticinventory.messaging.LocalizedMessages;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.plugin.java.JavaPluginLoader;
 
 import java.io.File;
 import java.util.logging.Logger;
@@ -16,6 +18,14 @@ import java.util.logging.Logger;
 public class AutomaticInventory extends JavaPlugin {
 	public static AutomaticInventory instance;
 	public static Logger log;
+
+	public AutomaticInventory() {
+		super();
+	}
+
+	protected AutomaticInventory(JavaPluginLoader loader, PluginDescriptionFile description, File dataFolder, File file) {
+		super(loader, description, dataFolder, file);
+	}
 
 	public void onEnable() {
 		log = getLogger();
