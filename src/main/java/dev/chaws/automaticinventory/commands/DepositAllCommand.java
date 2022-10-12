@@ -51,9 +51,9 @@ public class DepositAllCommand extends AutomaticInventoryCommand {
 		var startY = player.getEyeLocation().getBlockY();
 		var startX = player.getEyeLocation().getBlockX();
 		var startZ = player.getEyeLocation().getBlockZ();
-		Thread thread = new AsyncChestDepositTask(world, snapshots, minY, maxY, startX, startY, startZ, player);
-		thread.setPriority(Thread.MIN_PRIORITY);
-		thread.start();
+
+		var task = new AsyncChestDepositTask(world, snapshots, minY, maxY, startX, startY, startZ, player);
+		AutomaticInventory.instance.getServer().getScheduler().runTaskAsynchronously(AutomaticInventory.instance, task);
 
 		if (!playerConfig.hasUsedDepositAll()) {
 			playerConfig.setUsedDepositAll(true);

@@ -28,22 +28,27 @@ public class DepositAllEndToEndTests {
 
 	@Test
 	void depositAllShouldDepositItemsInChests() {
-		var world = new WorldMock(Material.DIRT, 3);
-		server.addWorld(world);
+		var world = server.addSimpleWorld("world");
 
-		var block = world.getBlockAt(2, 3, 2);
+		var block = world.getBlockAt(2, 5, 2);
 		block.setType(Material.CHEST);
 		var chest = (ChestMock)ChestMock.mockState(block);
 		chest.getInventory().addItem(new ItemStack(Material.STONE, 1));
 
 		var player = server.addPlayer();
 		player.setOp(true);
-		player.setLocation(new Location(world, 0, 3, 0));
+		player.setLocation(new Location(world, 0, 5, 0));
 		player.getInventory().setItem(9, new ItemStack(Material.STONE, 1));
 
-		server.getScheduler().waitAsyncTasksFinished();
-
 		Assertions.assertTrue(player.performCommand("depositall"));
+
+//		server.getScheduler().performTicks(1000L);
+		while (!server.getScheduler().getPendingTasks().isEmpty()) {
+			server.getScheduler().waitAsyncTasksFinished();
+		}
+
+
+		Assertions.assertFalse(player.getInventory().contains(Material.STONE));
 		Assertions.assertTrue(chest.getInventory().contains(Material.STONE, 2));
 	}
 }

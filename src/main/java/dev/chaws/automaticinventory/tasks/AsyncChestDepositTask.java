@@ -12,12 +12,13 @@ import org.bukkit.event.Event;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.InventoryHolder;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-public class AsyncChestDepositTask extends Thread {
+public class AsyncChestDepositTask implements Runnable {
 	private final World world;
 	private final ChunkSnapshot[][] chunks;
 	private final int minY;
