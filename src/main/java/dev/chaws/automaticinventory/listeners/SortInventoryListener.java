@@ -74,7 +74,7 @@ public class SortInventoryListener implements Listener {
 
 		playerConfig.firstEmptySlot = firstEmpty;
 		var task = new PickupSortTask(player, playerConfig, inventory);
-		Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(AutomaticInventory.instance, task, 10L);
+		AutomaticInventory.instance.getServer().getScheduler().scheduleSyncDelayedTask(AutomaticInventory.instance, task, 10L);
 	}
 
 	public static void sortPlayerIfEnabled(Player player, PlayerConfig playerConfig, Inventory inventory) {

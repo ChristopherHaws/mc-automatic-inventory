@@ -30,7 +30,7 @@ dependencies {
     compileOnly spigot(project.property("spigotApiVersion"))
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.0'
-    testImplementation 'com.github.seeseemelk:MockBukkit-v1.19:2.123.6'
+    testImplementation 'com.github.seeseemelk:MockBukkit-v1.19:2.123.8'
 }
 
 spigot {

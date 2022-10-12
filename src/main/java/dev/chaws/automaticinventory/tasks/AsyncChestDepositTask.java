@@ -84,7 +84,7 @@ public class AsyncChestDepositTask extends Thread {
 		}
 
 		var chain = new QuickDepositChain(chestLocations, new DepositRecord(), player, true);
-		Bukkit.getScheduler().runTaskLater(AutomaticInventory.instance, chain, 1L);
+		AutomaticInventory.instance.getServer().getScheduler().runTaskLater(AutomaticInventory.instance, chain, 1L);
 	}
 
 	private Location makeLocation(Vector location) {
@@ -179,7 +179,7 @@ public class AsyncChestDepositTask extends Thread {
 				BlockFace.UP
 			);
 
-			Bukkit.getServer().getPluginManager().callEvent(event);
+			AutomaticInventory.instance.getServer().getPluginManager().callEvent(event);
 			if (event.useInteractedBlock() != Event.Result.DENY) {
 				var state = block.getState();
 				if (state instanceof InventoryHolder chest) {
@@ -195,7 +195,7 @@ public class AsyncChestDepositTask extends Thread {
 			}
 
 			var chain = new QuickDepositChain(this.remainingChestLocations, this.runningDepositRecord, this.player, this.respectExclusions);
-			Bukkit.getScheduler().runTaskLater(AutomaticInventory.instance, chain, 1L);
+			AutomaticInventory.instance.getServer().getScheduler().runTaskLater(AutomaticInventory.instance, chain, 1L);
 		}
 	}
 }

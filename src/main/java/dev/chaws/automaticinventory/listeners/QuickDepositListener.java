@@ -1,5 +1,6 @@
 package dev.chaws.automaticinventory.listeners;
 
+import dev.chaws.automaticinventory.AutomaticInventory;
 import dev.chaws.automaticinventory.configuration.Features;
 import dev.chaws.automaticinventory.configuration.PlayerConfig;
 import dev.chaws.automaticinventory.messaging.Messages;
@@ -36,7 +37,7 @@ public class QuickDepositListener implements Listener {
 		}
 
 		var clickBlockEvent = new PlayerInteractEvent(player, Action.RIGHT_CLICK_BLOCK, player.getInventory().getItemInMainHand(), clickedBlock, BlockFace.EAST);
-		Bukkit.getServer().getPluginManager().callEvent(clickBlockEvent);
+		AutomaticInventory.instance.getServer().getPluginManager().callEvent(clickBlockEvent);
 		if (clickBlockEvent.useInteractedBlock() == Event.Result.DENY) {
 			return;
 		}
