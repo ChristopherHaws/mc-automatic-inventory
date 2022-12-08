@@ -1,6 +1,8 @@
 package dev.chaws.automaticinventory.configuration;
 
 import dev.chaws.automaticinventory.AutomaticInventory;
+import dev.chaws.automaticinventory.common.LocationRange;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -8,6 +10,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -22,6 +25,7 @@ public class GlobalConfig {
 	public Set<Material> autoRefillExcludedItems = new HashSet<>();
 	public Set<Material> autoDepositExcludedItems = new HashSet<>();
 	public List<String> excludeItemsContainingThisString;
+	public LocationRange[] disallowedZones;
 
 	public boolean isItemExcludedViaName(ItemStack itemStack) {
 		if (this.excludeItemsContainingThisString.isEmpty()) {
@@ -89,6 +93,9 @@ public class GlobalConfig {
 			instance.excludeItemsContainingThisString.add(legacyExcludedItem);
 		}
 		outConfig.set("excludeItemsContainingThisString", instance.excludeItemsContainingThisString);
+
+		var foo = new ArrayList<LocationRange>();
+		var bar = config.getList("disallowedZones", foo);
 
 		try {
 			outConfig.save(configFile);

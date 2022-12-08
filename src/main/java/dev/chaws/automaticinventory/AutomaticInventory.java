@@ -1,12 +1,14 @@
 package dev.chaws.automaticinventory;
 
 import dev.chaws.automaticinventory.commands.*;
+import dev.chaws.automaticinventory.common.LocationRange;
 import dev.chaws.automaticinventory.configuration.Features;
 import dev.chaws.automaticinventory.configuration.GlobalConfig;
 import dev.chaws.automaticinventory.configuration.PlayerConfig;
 import dev.chaws.automaticinventory.listeners.*;
 import dev.chaws.automaticinventory.messaging.LocalizedMessages;
 import org.bstats.bukkit.Metrics;
+import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -30,6 +32,8 @@ public class AutomaticInventory extends JavaPlugin {
 	public void onEnable() {
 		log = getLogger();
 		instance = this;
+
+		ConfigurationSerialization.registerClass(LocationRange.class);
 
 		var dataFolder = this.initializeDataFolder();
 		GlobalConfig.initialize(dataFolder);
