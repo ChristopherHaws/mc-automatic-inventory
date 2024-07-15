@@ -6,7 +6,7 @@ import dev.chaws.automaticinventory.configuration.GlobalConfig;
 import dev.chaws.automaticinventory.configuration.PlayerConfig;
 import dev.chaws.automaticinventory.listeners.*;
 import dev.chaws.automaticinventory.messaging.LocalizedMessages;
-import org.bstats.bukkit.Metrics;
+import dev.chaws.automaticinventory.utilities.Metrics;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -46,7 +46,7 @@ public class AutomaticInventory extends JavaPlugin {
 		this.registerCommand("quickdeposit", new QuickDepositCommand());
 
 		try {
-			new Metrics(this, 3547);
+			new Metrics(this, 16822);
 		} catch (Throwable ignored) {
 		}
 	}

@@ -1,5 +1,6 @@
 package dev.chaws.automaticinventory.tasks;
 
+import org.bukkit.craftbukkit.util.CraftMagicNumbers;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -32,7 +33,7 @@ public class InventorySorter implements Runnable {
 			}
 		}
 
-		Collections.sort(stacks, new StackComparator());
+		stacks.sort(new StackComparator());
 		for (var i = 1; i < stacks.size(); i++) {
 			var prevStack = stacks.get(i - 1);
 			var thisStack = stacks.get(i);
@@ -72,9 +73,21 @@ public class InventorySorter implements Runnable {
 				return result;
 			}
 
-			result = Byte.compare(b.getData().getData(), a.getData().getData());
-			if (result != 0) {
-				return result;
+            //noinspection removal
+            var aData = a.getData();
+			//noinspection removal
+			var bData = b.getData();
+
+            //noinspection deprecation
+            var aDataData = aData == null ? null : aData.getData();
+			//noinspection deprecation
+			var bDataData = bData == null ? null : bData.getData();
+
+			if (aDataData != null && bDataData != null) {
+				result = Byte.compare(bDataData, aDataData);
+				if (result != 0) {
+					return result;
+				}
 			}
 
 			result = Integer.compare(b.getAmount(), a.getAmount());

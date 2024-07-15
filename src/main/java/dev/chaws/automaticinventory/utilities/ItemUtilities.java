@@ -7,9 +7,11 @@ public class ItemUtilities {
 	public static String getSignature(ItemStack stack) {
 		var signature = stack.getType().name();
 		if (stack.getMaxStackSize() > 1) {
-			var data = stack.getData();
+			// getData will not actually be removed according to the spigot forums
+            //noinspection removal
+            var data = stack.getData();
 			if (data != null) {
-				// getData will not actually be deprecated according to the spigot forums
+				// getData will not actually be removed according to the spigot forums
 				//noinspection deprecation
 				signature += "." + String.valueOf(data.getData());
 			}
@@ -18,7 +20,7 @@ public class ItemUtilities {
 		var meta = stack.getItemMeta();
 		if (meta != null && meta.hasDisplayName()) {
 			// Append the name of the item is there is a custom name given to it
-			signature += "." + meta.getDisplayName();
+			signature += "." + meta.displayName();
 		}
 
 		//differentiate potion types. Original credit to pugabyte: https://github.com/Pugabyte/AutomaticInventory/commit/01bbdbfa0ea1bc7dc397fc8a8ff625f3f22e1ed6
