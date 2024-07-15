@@ -110,6 +110,7 @@ public class RefillStacksListener implements Listener {
 		if (GlobalConfig.instance.autoRefillExcludedItems.contains(stack.getType())) {
 			return;
 		}
+
 		if (stack.getAmount() == 1) {
 			var inventory = player.getInventory();
 			AutomaticInventory.instance.getServer().getScheduler().scheduleSyncDelayedTask(
@@ -120,10 +121,11 @@ public class RefillStacksListener implements Listener {
 	}
 
 	private EquipmentSlot getSlotWithItemStack(PlayerInventory inventory, ItemStack brokenItem) {
-		if (ItemUtilities.itemsAreSimilar(inventory.getItemInMainHand(), brokenItem)) {
+		if (inventory.getItemInMainHand().isSimilar(brokenItem)) {
 			return EquipmentSlot.HAND;
 		}
-		if (ItemUtilities.itemsAreSimilar(inventory.getItemInOffHand(), brokenItem)) {
+
+		if (inventory.getItemInOffHand().isSimilar(brokenItem)) {
 			return EquipmentSlot.OFF_HAND;
 		}
 

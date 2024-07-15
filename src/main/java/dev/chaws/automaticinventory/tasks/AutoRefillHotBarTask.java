@@ -37,7 +37,8 @@ public class AutoRefillHotBarTask implements Runnable {
 			if (itemInSlot == null) {
 				continue;
 			}
-			if (ItemUtilities.itemsAreSimilar(itemInSlot, this.stackToReplace)) {
+
+			if (itemInSlot.isSimilar(this.stackToReplace)) {
 				var stackSize = itemInSlot.getAmount();
 				if (stackSize < bestMatchStackSize) {
 					bestMatchStack = itemInSlot;
