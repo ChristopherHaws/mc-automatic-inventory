@@ -7,13 +7,9 @@ public class ItemUtilities {
 	public static String getSignature(ItemStack stack) {
 		var signature = stack.getType().name();
 		if (stack.getMaxStackSize() > 1) {
-			// getData will not actually be removed according to the spigot forums
-            //noinspection removal
-            var data = stack.getData();
+            var data = stack.getItemMeta();
 			if (data != null) {
-				// getData will not actually be removed according to the spigot forums
-				//noinspection deprecation
-				signature += "." + String.valueOf(data.getData());
+				signature += "." + String.valueOf(data);
 			}
 		}
 

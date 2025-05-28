@@ -3,7 +3,6 @@ package dev.chaws.automaticinventory.tasks;
 import dev.chaws.automaticinventory.configuration.PlayerConfig;
 import dev.chaws.automaticinventory.messaging.Messages;
 import dev.chaws.automaticinventory.utilities.Chat;
-import dev.chaws.automaticinventory.utilities.ItemUtilities;
 import dev.chaws.automaticinventory.utilities.Level;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;

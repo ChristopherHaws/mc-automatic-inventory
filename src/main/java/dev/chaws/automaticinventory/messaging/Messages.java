@@ -22,5 +22,6 @@ public enum Messages {
 	QuickDepositDisabled,
 	AutoRefillHelp,
 	AutoRefillEnabled,
-	AutoRefillDisabled
+	AutoRefillDisabled,
+	StartingDepositAll,
 }

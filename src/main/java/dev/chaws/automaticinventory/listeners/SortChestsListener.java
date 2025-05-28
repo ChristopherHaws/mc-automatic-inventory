@@ -31,7 +31,7 @@ public class SortChestsListener implements Listener {
 
 		if (!player.isSneaking() && PlayerConfig.featureEnabled(Features.SortChests, player)) {
 			var topInventory = event.getView().getTopInventory();
-			if (!InventoryUtilities.isSortableChestInventory(topInventory, event.getView().getTitle())) {
+			if (!InventoryUtilities.isSortableChestInventory(topInventory, event.getView().title().examinableName())) {
 				return;
 			}
 

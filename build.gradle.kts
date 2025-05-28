@@ -15,7 +15,7 @@ plugins {
 }
 
 group = "dev.chaws.automaticinventory"
-version = "4.0.0"
+version = "4.1.0"
 description = "Automatic Inventory PaperMC Plugin"
 
 repositories {
@@ -74,7 +74,7 @@ bukkitPluginYaml {
     main = "dev.chaws.automaticinventory.AutomaticInventory"
     // TODO: Try POSTWORLD
     load = BukkitPluginYaml.PluginLoadOrder.STARTUP
-    authors = listOf("Chaws", "Pugabyte", "AllTheCode", "RoboMWM", "Big_Scary")
+    authors = listOf("Bittiez", "Chaws", "Pugabyte", "AllTheCode", "RoboMWM", "Big_Scary")
     apiVersion = "1.21"
     commands.register("autosort") {
         description = "Toggles auto-sorting options."

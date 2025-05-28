@@ -28,6 +28,8 @@ public class DepositAllCommand extends AutomaticInventoryCommand {
 			return true;
 		}
 
+		Chat.sendMessage(player, Level.Info, Messages.StartingDepositAll);
+
 		//gather snapshots of adjacent chunks
 		var location = player.getLocation();
 		var centerChunk = location.getChunk();

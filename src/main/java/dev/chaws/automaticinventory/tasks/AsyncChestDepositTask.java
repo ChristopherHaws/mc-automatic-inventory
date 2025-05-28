@@ -184,7 +184,11 @@ public class AsyncChestDepositTask extends Thread {
 				var state = block.getState();
 				if (state instanceof InventoryHolder chest) {
 					var chestInventory = chest.getInventory();
-					if (!this.respectExclusions || InventoryUtilities.isSortableChestInventory(chestInventory, state instanceof Nameable nameable ? nameable.getCustomName() : null)) {
+					String name = chest.getClass().getSimpleName();
+					if (state instanceof Nameable nameable && nameable.customName() != null) {
+						name = nameable.customName().toString();
+					}
+					if (!this.respectExclusions || InventoryUtilities.isSortableChestInventory(chestInventory, name)) {
 						var playerInventory = player.getInventory();
 
 						var deposits = InventoryUtilities.depositMatching(playerInventory, chestInventory, false);
@@ -195,7 +199,7 @@ public class AsyncChestDepositTask extends Thread {
 			}
 
 			var chain = new QuickDepositChain(this.remainingChestLocations, this.runningDepositRecord, this.player, this.respectExclusions);
-			Bukkit.getScheduler().runTaskLater(AutomaticInventory.instance, chain, 1L);
+			Bukkit.getScheduler().runTaskLater(AutomaticInventory.instance, chain, 5L);
 		}
 	}
 }

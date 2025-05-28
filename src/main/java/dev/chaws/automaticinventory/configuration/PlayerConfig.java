@@ -54,7 +54,7 @@ public class PlayerConfig {
 		if (data.isEmpty()) {
 			return new PlayerConfig(player);
 		} else {
-			return (PlayerConfig)data.get(0).value();
+			return (PlayerConfig) data.get(0).value();
 		}
 	}
 
@@ -176,9 +176,9 @@ public class PlayerConfig {
 	}
 
 	public void saveChanges() {
-        if (!this.isDirty) {
-            return;
-        }
+		if (!this.isDirty) {
+			return;
+		}
 
 		this.waitForLoadComplete();
 		this.savingThread = new Thread(new DataSaver());
@@ -242,9 +242,12 @@ public class PlayerConfig {
 				needRetry = false;
 				FileConfiguration config = YamlConfiguration.loadConfiguration(this.playerConfigFile);
 				this.sortChests = config.getBoolean("Sort Chests", GlobalConfig.autosortEnabledByDefault);
-				this.sortInventory = config.getBoolean("Sort Personal Inventory", GlobalConfig.autosortEnabledByDefault);
-				this.quickDepositEnabled = config.getBoolean("Quick Deposit Enabled", GlobalConfig.quickDepositEnabledByDefault);
-				this.autoRefillEnabled = config.getBoolean("Auto Refill Enabled", GlobalConfig.autoRefillEnabledByDefault);
+				this.sortInventory = config.getBoolean("Sort Personal Inventory",
+						GlobalConfig.autosortEnabledByDefault);
+				this.quickDepositEnabled = config.getBoolean("Quick Deposit Enabled",
+						GlobalConfig.quickDepositEnabledByDefault);
+				this.autoRefillEnabled = config.getBoolean("Auto Refill Enabled",
+						GlobalConfig.autoRefillEnabledByDefault);
 				this.usedQuickDeposit = config.getBoolean("Used Quick Deposit", false);
 				this.receivedChestSortInfo = config.getBoolean("Received Messages.Chest Inventory", false);
 				this.receivedInventorySortInfo = config.getBoolean("Received Messages.Personal Inventory", false);
@@ -252,7 +255,8 @@ public class PlayerConfig {
 				this.receivedDepositAllInfo = config.getBoolean("Received Messages.Deposit All", false);
 			}
 
-			//if there's any problem with the file's content, retry up to 5 times with 5 milliseconds between
+			// if there's any problem with the file's content, retry up to 5 times with 5
+			// milliseconds between
 			catch (Exception e) {
 				latestException = e;
 				needRetry = true;
@@ -268,10 +272,11 @@ public class PlayerConfig {
 
 		} while (needRetry && retriesRemaining >= 0);
 
-		//if last attempt failed, log information about the problem
+		// if last attempt failed, log information about the problem
 		if (needRetry) {
 			var errors = new StringWriter();
-			latestException.printStackTrace(new PrintWriter(errors));
+			if (latestException != null)
+				latestException.printStackTrace(new PrintWriter(errors));
 			AutomaticInventory.log.info("Failed to load data for " + playerID + " " + errors);
 		}
 	}
