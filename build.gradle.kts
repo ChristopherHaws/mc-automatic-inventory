@@ -14,10 +14,6 @@ plugins {
 //    id("com.github.johnrengelman.shadow") version "8.1.1"
 }
 
-group = "dev.chaws.automaticinventory"
-version = "4.0.0"
-description = "Automatic Inventory PaperMC Plugin"
-
 repositories {
     mavenLocal()
     mavenCentral()
@@ -33,6 +29,10 @@ repositories {
         name = "bstats"
         url = URI("https://oss.sonatype.org/content/groups/public/")
     }
+    maven {
+        name = "codemc-repo"
+        url = URI("https://repo.codemc.io/repository/maven-public/")
+    }
 }
 
 java {
@@ -44,6 +44,7 @@ dependencies {
     // paperweight.foliaDevBundle("1.21-R0.1-SNAPSHOT")
     // paperweight.devBundle("com.example.paperfork", "1.21-R0.1-SNAPSHOT")
     implementation("org.bstats:bstats-bukkit:3.0.2")
+    implementation("com.griefcraft:lwc:2.4.1")
 
     // Add ASM dependency to support Java 21 class files
     implementation("org.ow2.asm:asm:9.7")

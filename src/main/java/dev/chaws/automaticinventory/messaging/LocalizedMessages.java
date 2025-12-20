@@ -47,6 +47,7 @@ public class LocalizedMessages {
 		instance.addDefault(defaults, Messages.AutoRefillHelp, "Options are /autorefill toggle, /autorefill enable, and /autorefill disable.");
 		instance.addDefault(defaults, Messages.AutoRefillEnabled, "Auto refill enabled.");
 		instance.addDefault(defaults, Messages.AutoRefillDisabled, "Auto refill disabled.");
+		instance.addDefault(defaults, Messages.StartingDepositAll, "Checking for items to deposit.. This may take a moment.");
 
 		//load the configuration file
 		FileConfiguration config = YamlConfiguration.loadConfiguration(localizationFile);
@@ -108,12 +109,10 @@ public class LocalizedMessages {
 	}
 
 	private static class LocalizedMessage {
-		public Messages id;
 		public String text;
 		public String notes;
 
 		public LocalizedMessage(Messages id, String text, String notes) {
-			this.id = id;
 			this.text = text;
 			this.notes = notes;
 		}
