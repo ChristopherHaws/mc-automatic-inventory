@@ -1,23 +1,19 @@
 package dev.chaws.automaticinventory.listeners;
 
-import com.griefcraft.lwc.LWC;
 import dev.chaws.automaticinventory.AutomaticInventory;
 import dev.chaws.automaticinventory.configuration.Features;
 import dev.chaws.automaticinventory.configuration.PlayerConfig;
+import dev.chaws.automaticinventory.hooks.LWCHook;
 import dev.chaws.automaticinventory.messaging.Messages;
 import dev.chaws.automaticinventory.tasks.InventorySorter;
 import dev.chaws.automaticinventory.utilities.Chat;
 import dev.chaws.automaticinventory.utilities.InventoryUtilities;
 import dev.chaws.automaticinventory.utilities.Level;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.block.DoubleChest;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryOpenEvent;
-import org.bukkit.inventory.BlockInventoryHolder;
-import org.bukkit.inventory.InventoryHolder;
 
 public class SortChestsListener implements Listener {
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
@@ -36,21 +32,17 @@ public class SortChestsListener implements Listener {
 
 		if (!player.isSneaking() && PlayerConfig.featureEnabled(Features.SortChests, player)) {
 			var topInventory = event.getView().getTopInventory();
-			if (topInventory.getHolder() instanceof BlockInventoryHolder || topInventory.getHolder() instanceof DoubleChest) {
-				Location inventoryLocation = topInventory.getLocation();
-				var protection = LWC.getInstance().findProtection(inventoryLocation);
-				if (protection != null && protection.isRealOwner(player)) {
-					if (!InventoryUtilities.isSortableChestInventory(topInventory, event.getView().title().examinableName())) {
-						return;
-					}
+			if (LWCHook.canUseContainer(topInventory, player)) {
+				if (!InventoryUtilities.isSortableChestInventory(topInventory, event.getView().title().examinableName())) {
+					return;
+				}
 
-					var sorter = new InventorySorter(topInventory, 0);
-					Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(AutomaticInventory.instance, sorter, 1L);
+				var sorter = new InventorySorter(topInventory, 0);
+				Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(AutomaticInventory.instance, sorter, 1L);
 
-					if (!playerConfig.hasReceivedChestSortInfo()) {
-						Chat.sendMessage(player, Level.Info, Messages.ChestSortEducation3);
-						playerConfig.setReceivedChestSortInfo(true);
-					}
+				if (!playerConfig.hasReceivedChestSortInfo()) {
+					Chat.sendMessage(player, Level.Info, Messages.ChestSortEducation3);
+					playerConfig.setReceivedChestSortInfo(true);
 				}
 			}
 		}

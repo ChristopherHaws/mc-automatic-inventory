@@ -77,6 +77,7 @@ bukkitPluginYaml {
     load = BukkitPluginYaml.PluginLoadOrder.STARTUP
     authors = listOf("Chaws", "Pugabyte", "AllTheCode", "RoboMWM", "Big_Scary")
     apiVersion = "1.21"
+    softDepend = listOf("LWC")
     commands.register("autosort") {
         description = "Toggles auto-sorting options."
         permission = "automaticinventory.sortchests"

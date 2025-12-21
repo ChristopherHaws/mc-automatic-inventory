@@ -1,9 +1,9 @@
 package dev.chaws.automaticinventory.tasks;
 
-import com.griefcraft.lwc.LWC;
 import dev.chaws.automaticinventory.AutomaticInventory;
 import dev.chaws.automaticinventory.common.DepositRecord;
 import dev.chaws.automaticinventory.configuration.*;
+import dev.chaws.automaticinventory.hooks.LWCHook;
 import dev.chaws.automaticinventory.messaging.*;
 import dev.chaws.automaticinventory.utilities.*;
 import org.bukkit.*;
@@ -184,8 +184,7 @@ public class AsyncChestDepositTask extends Thread {
 			if (event.useInteractedBlock() != Event.Result.DENY) {
 				var state = block.getState();
 				if (state instanceof InventoryHolder chest) {
-                    var protection = LWC.getInstance().findProtection(chestLocation);
-                    if (protection != null && protection.isRealOwner(player)) {
+                    if (LWCHook.canUseContainer(chestLocation, player)) {
                         var chestInventory = chest.getInventory();
                         var name = chest.getClass().getSimpleName();
                         if (state instanceof Nameable nameable && nameable.customName() != null) {
