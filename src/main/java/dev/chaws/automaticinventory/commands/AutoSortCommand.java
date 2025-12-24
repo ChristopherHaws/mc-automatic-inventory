@@ -6,7 +6,7 @@ import dev.chaws.automaticinventory.configuration.PlayerConfig;
 import dev.chaws.automaticinventory.messaging.Messages;
 import dev.chaws.automaticinventory.utilities.Chat;
 import dev.chaws.automaticinventory.utilities.Level;
-import org.bukkit.ChatColor;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -28,7 +28,7 @@ public class AutoSortCommand extends AutomaticInventoryCommand {
 
 		// Guard to prevent out of index error
 		if (args.length < 1) {
-			Chat.sendMessage(player, ChatColor.GOLD, "Usage: /autosort [chest|inv]");
+			Chat.sendMessage(player, NamedTextColor.GOLD, "Usage: /autosort [chest|inv]");
 			return false;
 		}
 

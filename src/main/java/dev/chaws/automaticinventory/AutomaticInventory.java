@@ -4,6 +4,7 @@ import dev.chaws.automaticinventory.commands.*;
 import dev.chaws.automaticinventory.configuration.Features;
 import dev.chaws.automaticinventory.configuration.GlobalConfig;
 import dev.chaws.automaticinventory.configuration.PlayerConfig;
+import dev.chaws.automaticinventory.hooks.LWCHook;
 import dev.chaws.automaticinventory.listeners.*;
 import dev.chaws.automaticinventory.messaging.LocalizedMessages;
 import dev.chaws.automaticinventory.utilities.Metrics;
@@ -44,6 +45,10 @@ public class AutomaticInventory extends JavaPlugin {
 		this.registerCommand("autosort", new AutoSortCommand());
 		this.registerCommand("depositall", new DepositAllCommand());
 		this.registerCommand("quickdeposit", new QuickDepositCommand());
+
+		if (pluginManager.getPlugin("LWC") != null) {
+			LWCHook.enable();
+		}
 
 		try {
 			new Metrics(this, 16822);

@@ -16,15 +16,15 @@ jobs:
 
     steps:
       - name: Checkout Git repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
       - name: Restore Gradle cache
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: ~/.gradle/caches
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
 
@@ -35,24 +35,73 @@ jobs:
           java-version: 21
 
       - name: Validate Gradle Wrapper
-        uses: gradle/wrapper-validation-action@v1
+        uses: gradle/actions/wrapper-validation@v3
 
       - name: Build with Gradle
         run: |
           chmod +x gradlew
           ./gradlew build --stacktrace
 
-      - name: Install rename
-        run: sudo apt-get install -y rename
-
-# This is only needed when using shadow jar
-#      - name: Rename file
-#        run: |
-#          cd ./build/libs/
-#          rename -f 's/-all//;' '' *
-
       - name: Archive plugin jars on GitHub
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: AutomaticInventory
           path: build/libs
+          overwrite: 'true'
+          
+  release:
+    name: Release
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+
+    permissions:
+      contents: write  # Required to create/delete tags and releases
+
+    steps:
+      - name: Checkout Git repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Git user
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+
+      - name: Get short commit SHA
+        id: vars
+        run: echo "sha_short=$(git rev-parse --short HEAD)" >> "$GITHUB_OUTPUT"
+
+      - name: Delete previous release (if exists)
+        continue-on-error: true
+        run: |
+          gh release delete latest --yes
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Delete previous tag (if exists)
+        continue-on-error: true
+        run: |
+          git tag -d latest || true
+          git push origin :refs/tags/latest || true
+
+      - name: Create new tag
+        run: |
+          git tag latest
+          git push origin latest
+
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: AutomaticInventory
+          path: artifacts
+
+      - name: Create GitHub Release
+        run: |
+          ls artifacts  # optional: see what's there
+          gh release create latest artifacts/* \
+            --title "Latest Build (${{ steps.vars.outputs.sha_short }})" \
+            --notes "Automated build from commit ${{ steps.vars.outputs.sha_short }}"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

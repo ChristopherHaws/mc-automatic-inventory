@@ -70,7 +70,8 @@ public class InventoryUtilities {
 	}
 
 	public static DepositRecord depositMatching(PlayerInventory source, Inventory destination, boolean depositHotbar) {
-		var eligibleSignatures = new HashSet<String>();
+		
+		var eligibleSignatures = new HashSet<String>(destination.getSize());
 		var deposits = new DepositRecord();
 		for (var i = 0; i < destination.getSize(); i++) {
 			var destinationStack = destination.getItem(i);
