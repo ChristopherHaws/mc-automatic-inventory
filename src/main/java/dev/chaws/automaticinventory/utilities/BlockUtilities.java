@@ -1,6 +1,5 @@
 package dev.chaws.automaticinventory.utilities;
 
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Barrel;
 import org.bukkit.block.Block;

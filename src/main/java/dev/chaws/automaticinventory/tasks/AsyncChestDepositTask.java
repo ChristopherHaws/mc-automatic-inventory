@@ -3,6 +3,7 @@ package dev.chaws.automaticinventory.tasks;
 import dev.chaws.automaticinventory.AutomaticInventory;
 import dev.chaws.automaticinventory.common.DepositRecord;
 import dev.chaws.automaticinventory.configuration.*;
+import dev.chaws.automaticinventory.hooks.LWCHook;
 import dev.chaws.automaticinventory.messaging.*;
 import dev.chaws.automaticinventory.utilities.*;
 import org.bukkit.*;
@@ -183,14 +184,20 @@ public class AsyncChestDepositTask extends Thread {
 			if (event.useInteractedBlock() != Event.Result.DENY) {
 				var state = block.getState();
 				if (state instanceof InventoryHolder chest) {
-					var chestInventory = chest.getInventory();
-					if (!this.respectExclusions || InventoryUtilities.isSortableChestInventory(chestInventory, state instanceof Nameable nameable ? nameable.getCustomName() : null)) {
-						var playerInventory = player.getInventory();
+                    if (LWCHook.canUseContainer(chestLocation, player)) {
+                        var chestInventory = chest.getInventory();
+                        var name = chest.getClass().getSimpleName();
+                        if (state instanceof Nameable nameable && nameable.customName() != null) {
+                            name = nameable.customName().toString();
+                        }
+                        if (!this.respectExclusions || InventoryUtilities.isSortableChestInventory(chestInventory, name)) {
+                            var playerInventory = player.getInventory();
 
-						var deposits = InventoryUtilities.depositMatching(playerInventory, chestInventory, false);
+                            var deposits = InventoryUtilities.depositMatching(playerInventory, chestInventory, false);
 
-						this.runningDepositRecord.totalItems += deposits.totalItems;
-					}
+                            this.runningDepositRecord.totalItems += deposits.totalItems;
+                        }
+                    }
 				}
 			}
 

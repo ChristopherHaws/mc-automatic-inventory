@@ -3,6 +3,7 @@ package dev.chaws.automaticinventory.listeners;
 import dev.chaws.automaticinventory.AutomaticInventory;
 import dev.chaws.automaticinventory.configuration.Features;
 import dev.chaws.automaticinventory.configuration.PlayerConfig;
+import dev.chaws.automaticinventory.hooks.LWCHook;
 import dev.chaws.automaticinventory.messaging.Messages;
 import dev.chaws.automaticinventory.tasks.InventorySorter;
 import dev.chaws.automaticinventory.utilities.Chat;
@@ -31,16 +32,18 @@ public class SortChestsListener implements Listener {
 
 		if (!player.isSneaking() && PlayerConfig.featureEnabled(Features.SortChests, player)) {
 			var topInventory = event.getView().getTopInventory();
-			if (!InventoryUtilities.isSortableChestInventory(topInventory, event.getView().getTitle())) {
-				return;
-			}
+			if (LWCHook.canUseContainer(topInventory, player)) {
+				if (!InventoryUtilities.isSortableChestInventory(topInventory, event.getView().title().examinableName())) {
+					return;
+				}
 
-			var sorter = new InventorySorter(topInventory, 0);
-			Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(AutomaticInventory.instance, sorter, 1L);
+				var sorter = new InventorySorter(topInventory, 0);
+				Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(AutomaticInventory.instance, sorter, 1L);
 
-			if (!playerConfig.hasReceivedChestSortInfo()) {
-				Chat.sendMessage(player, Level.Info, Messages.ChestSortEducation3);
-				playerConfig.setReceivedChestSortInfo(true);
+				if (!playerConfig.hasReceivedChestSortInfo()) {
+					Chat.sendMessage(player, Level.Info, Messages.ChestSortEducation3);
+					playerConfig.setReceivedChestSortInfo(true);
+				}
 			}
 		}
 	}

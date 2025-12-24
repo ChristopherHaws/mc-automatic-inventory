@@ -5,7 +5,6 @@ import dev.chaws.automaticinventory.configuration.Features;
 import dev.chaws.automaticinventory.configuration.GlobalConfig;
 import dev.chaws.automaticinventory.configuration.PlayerConfig;
 import dev.chaws.automaticinventory.tasks.AutoRefillHotBarTask;
-import dev.chaws.automaticinventory.utilities.ItemUtilities;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

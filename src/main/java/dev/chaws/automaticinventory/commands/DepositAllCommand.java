@@ -7,6 +7,7 @@ import dev.chaws.automaticinventory.messaging.Messages;
 import dev.chaws.automaticinventory.tasks.AsyncChestDepositTask;
 import dev.chaws.automaticinventory.utilities.Chat;
 import dev.chaws.automaticinventory.utilities.Level;
+import org.bukkit.Bukkit;
 import org.bukkit.ChunkSnapshot;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -27,6 +28,8 @@ public class DepositAllCommand extends AutomaticInventoryCommand {
 			Chat.sendMessage(player, Level.Error, Messages.NoPermissionForFeature);
 			return true;
 		}
+
+		Chat.sendMessage(player, Level.Info, Messages.StartingDepositAll);
 
 		//gather snapshots of adjacent chunks
 		var location = player.getLocation();
@@ -51,9 +54,7 @@ public class DepositAllCommand extends AutomaticInventoryCommand {
 		var startY = player.getEyeLocation().getBlockY();
 		var startX = player.getEyeLocation().getBlockX();
 		var startZ = player.getEyeLocation().getBlockZ();
-		Thread thread = new AsyncChestDepositTask(world, snapshots, minY, maxY, startX, startY, startZ, player);
-		thread.setPriority(Thread.MIN_PRIORITY);
-		thread.start();
+        Bukkit.getScheduler().runTaskAsynchronously(AutomaticInventory.instance, () -> new AsyncChestDepositTask(world, snapshots, minY, maxY, startX, startY, startZ, player).start());
 
 		if (!playerConfig.hasUsedDepositAll()) {
 			playerConfig.setUsedDepositAll(true);

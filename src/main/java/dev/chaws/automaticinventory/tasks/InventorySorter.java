@@ -1,12 +1,10 @@
 package dev.chaws.automaticinventory.tasks;
 
-import org.bukkit.craftbukkit.util.CraftMagicNumbers;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 
 public class InventorySorter implements Runnable {
@@ -73,18 +71,11 @@ public class InventorySorter implements Runnable {
 				return result;
 			}
 
-            //noinspection removal
-            var aData = a.getData();
-			//noinspection removal
-			var bData = b.getData();
+			var aMeta = a.getItemMeta();
+			var bMeta = b.getItemMeta();
 
-            //noinspection deprecation
-            var aDataData = aData == null ? null : aData.getData();
-			//noinspection deprecation
-			var bDataData = bData == null ? null : bData.getData();
-
-			if (aDataData != null && bDataData != null) {
-				result = Byte.compare(bDataData, aDataData);
+			if (aMeta != null && bMeta != null) {
+				result = bMeta.toString().compareTo(aMeta.toString());
 				if (result != 0) {
 					return result;
 				}
