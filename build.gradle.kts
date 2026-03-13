@@ -15,7 +15,7 @@ plugins {
 }
 
 group = "dev.chaws.automaticinventory"
-version = "4.0.0"
+version = "4.1.0"
 description = "Automatic Inventory PaperMC Plugin"
 
 repositories {

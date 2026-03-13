@@ -39,6 +39,7 @@ public class LocalizedMessages {
 		instance.addDefault(defaults, Messages.QuickDepositAdvertisement3, "Want to deposit quickly from your hotbar?  Just pick a specific chest and sneak (hold shift) while hitting it.");
 		instance.addDefault(defaults, Messages.FailedDepositChestFull2, "That chest is full.");
 		instance.addDefault(defaults, Messages.SuccessfulDepositAll2, "Deposited {0} items into nearby chests.");
+		instance.addDefault(defaults, Messages.SuccessfulDepositAllWithShulkers, "Deposited {0} items and {1} full shulkers into nearby chests.");
 		instance.addDefault(defaults, Messages.ChestLidBlocked, "That chest isn't accessible.");
 		instance.addDefault(defaults, Messages.DepositAllAdvertisement, "TIP: Instantly deposit all items from your inventory into all the right nearby boxes with /DepositAll!");
 		instance.addDefault(defaults, Messages.QuickDepositHelp, "Options are /quickdeposit toggle, /quickdeposit enable, and /quickdeposit disable.");

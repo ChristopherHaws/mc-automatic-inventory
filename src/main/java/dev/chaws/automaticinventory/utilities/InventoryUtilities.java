@@ -99,11 +99,35 @@ public class InventoryUtilities {
 
 			var signature = ItemUtilities.getSignature(sourceStack);
 			var sourceStackSize = sourceStack.getAmount();
+			var isShulkerBox = MaterialUtilities.isShulkerBox(sourceStack.getType());
+
+			// Shulker box special handling
+			if (isShulkerBox) {
+				var meta = sourceStack.getItemMeta();
+
+				// Priority 1: Has custom name → use normal signature (as before)
+				if (meta != null && meta.hasDisplayName()) {
+					// signature stays as is (including name)
+				} else {
+					// Priority 2: No custom name → check content
+					var contentSig = ItemUtilities.getShulkerContentSignature(sourceStack);
+					if (contentSig == null) {
+						// Not full/uniform → skip this shulker
+						deposits.shulkersSkipped++;
+						continue;
+					}
+					signature = contentSig; // Match by inner item
+				}
+			}
+
 			if (eligibleSignatures.contains(signature)) {
 				var notMoved = destination.addItem(sourceStack);
 				if (notMoved.isEmpty()) {
 					source.clear(i);
 					deposits.totalItems += sourceStackSize;
+					if (isShulkerBox) {
+						deposits.shulkersDeposited++;
+					}
 				} else {
 					var notMovedCount = notMoved.values().iterator().next().getAmount();
 					var movedCount = sourceStackSize - notMovedCount;
@@ -113,6 +137,9 @@ public class InventoryUtilities {
 						var newAmount = sourceStackSize - movedCount;
 						sourceStack.setAmount(newAmount);
 						deposits.totalItems += movedCount;
+						if (isShulkerBox) {
+							deposits.shulkersDeposited++;
+						}
 					}
 				}
 			}

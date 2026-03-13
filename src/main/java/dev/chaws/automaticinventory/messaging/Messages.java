@@ -14,6 +14,7 @@ public enum Messages {
 	FailedDepositNoMatch,
 	FailedDepositChestFull2,
 	SuccessfulDepositAll2,
+	SuccessfulDepositAllWithShulkers,
 	ChestLidBlocked,
 	DepositAllAdvertisement,
 	QuickDepositAdvertisement3,

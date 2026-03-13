@@ -46,7 +46,7 @@ public class DepositAllCommand extends AutomaticInventoryCommand {
 		}
 
 		//create a thread to search those snapshots and create a chain of quick deposit attempts
-		var minY = Math.max(0, player.getEyeLocation().getBlockY() - 10);
+		var minY = Math.max(world.getMinHeight(), player.getEyeLocation().getBlockY() - 10);
 		var maxY = Math.min(world.getMaxHeight(), player.getEyeLocation().getBlockY() + 10);
 		var startY = player.getEyeLocation().getBlockY();
 		var startX = player.getEyeLocation().getBlockX();

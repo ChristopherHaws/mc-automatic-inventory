@@ -161,7 +161,13 @@ public class AsyncChestDepositTask extends Thread {
 		public void run() {
 			var chestLocation = this.remainingChestLocations.poll();
 			if (chestLocation == null) {
-				Chat.sendMessage(this.player, Level.Success, Messages.SuccessfulDepositAll2, String.valueOf(this.runningDepositRecord.totalItems));
+				if (this.runningDepositRecord.shulkersDeposited > 0) {
+					Chat.sendMessage(this.player, Level.Success, Messages.SuccessfulDepositAllWithShulkers,
+						String.valueOf(this.runningDepositRecord.totalItems),
+						String.valueOf(this.runningDepositRecord.shulkersDeposited));
+				} else {
+					Chat.sendMessage(this.player, Level.Success, Messages.SuccessfulDepositAll2, String.valueOf(this.runningDepositRecord.totalItems));
+				}
 				var playerConfig = PlayerConfig.fromPlayer(player);
 				if (Math.random() < .1 && !playerConfig.isGotQuickDepositInfo() && PlayerConfig.featureEnabled(Features.QuickDeposit, player)) {
 					Chat.sendMessage(player, Level.Instr, Messages.QuickDepositAdvertisement3);
@@ -190,6 +196,8 @@ public class AsyncChestDepositTask extends Thread {
 						var deposits = InventoryUtilities.depositMatching(playerInventory, chestInventory, false);
 
 						this.runningDepositRecord.totalItems += deposits.totalItems;
+						this.runningDepositRecord.shulkersDeposited += deposits.shulkersDeposited;
+						this.runningDepositRecord.shulkersSkipped += deposits.shulkersSkipped;
 					}
 				}
 			}
