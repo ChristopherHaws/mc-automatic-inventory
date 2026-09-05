@@ -1,6 +1,8 @@
 package dev.chaws.automaticinventory.hooks;
 
 import com.griefcraft.lwc.LWC;
+import com.griefcraft.model.Permission;
+import com.griefcraft.scripting.event.LWCAccessEvent;
 import org.bukkit.Location;
 import org.bukkit.block.DoubleChest;
 import org.bukkit.entity.Player;
@@ -26,7 +28,12 @@ public class LWCHook {
     public static boolean canUseContainer(Location location, Player player) {
         if (enabled) {
             var protection = LWC.getInstance().findProtection(location);
-            return protection != null && protection.isRealOwner(player);
+            if (protection == null)
+                return false;
+
+            LWCAccessEvent event = new LWCAccessEvent(player, protection, Permission.Access.NONE);
+            LWC.getInstance().getModuleLoader().dispatchEvent(event);
+            return protection.isRealOwner(player) || event.getAccess() == Permission.Access.PLAYER;
         }
         return true;
     }
